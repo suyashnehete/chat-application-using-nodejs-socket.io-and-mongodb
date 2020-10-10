@@ -1,0 +1,115 @@
+* {
+    margin: 0;
+    padding: 0
+}
+
+body{
+    overflow: hidden;
+}
+
+.header {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(232, 23, 33, 1);
+    height: 5vh;
+}
+
+.header form input {
+    padding: 5px;
+    font-size: 20px;
+    outline: none;
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.header form input:hover {
+    color: rgba(26, 23, 23, 0.7);
+}
+
+.container {
+    height: 92vh;
+    display: flex;
+}
+
+.container .users-list {
+    width: 30vw;
+    min-height: 100%;
+    overflow-y: auto;
+}
+
+.container .users-list .data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    border-bottom: 2px solid #000;
+    font-size: 25px;
+}
+
+.container .chat-section {
+    width: 70vw;
+    height: 100%;
+    border-left: 2px solid #000;
+}
+
+.container .chat-section .header {
+    background-color: aqua;
+    height: 5%;
+}
+
+.container .chat-section .chat-messages {
+    width: 100%;
+    height: 83%;
+}
+
+.container .chat-section .chat-messages .sender {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.container .chat-section .chat-messages .sender .msg {
+    width: min-content;
+    background-color: blueviolet;
+    margin: 5px;
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 15px;
+}
+
+.container .chat-section .chat-messages .receiver {
+    width: 100%;
+}
+
+.container .chat-section .chat-messages .receiver .msg {
+    width: min-content;
+    background-color: rgb(172, 127, 214);
+    margin: 5px;
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 15px;
+}
+
+.container .chat-section .typing {
+    padding: 10px;
+    height: 5%;
+    background-color: aqua;
+    display: flex;
+    align-items: center;
+}
+
+.container .chat-section .typing form {
+    width: 100%;
+}
+
+.container .chat-section .typing form input {
+    width: 75%;
+    padding: 5px;
+}
+
+.container .chat-section .typing form button {
+    width: 20%;
+    padding: 5px;
+}

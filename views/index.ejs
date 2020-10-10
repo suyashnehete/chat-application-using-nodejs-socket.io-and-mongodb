@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.min.css" />
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+  </head>
+
+  <body>
+    <div class="header">
+      <h1><%= name %></h1>
+      <form action="/" method="post">
+        <input type="hidden" name="type" value="logout" />
+        <input type="submit" value="Logout" />
+      </form>
+    </div>
+    <div class="container">
+      <div class="users-list">
+        <% list.forEach( user => { %> <% if(!user._id.equals(id)){ %>
+        <div class="data">
+          <div
+            class="name"
+            onclick="showData('<%= user.name %>','<%= user._id %>')"
+          >
+            <%= user.name %>
+          </div>
+        </div>
+        <% } %> <% }); %>
+      </div>
+      <div class="chat-section">
+        <div class="header">
+          <div id="name-of-receiver"></div>
+        </div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="typing">
+          <form>
+            <input
+              type="text"
+              name="inputMessage"
+              id="inputMessage"
+              class="inputMessage"
+            />
+            <button id="sendBtn" class="send">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    const socket = io("http://localhost:3000");
+    var container = document.getElementById("chat-messages");
+    var nameReceiver = document.getElementById("name-of-receiver");
+    var messageInput = document.getElementById("inputMessage");
+    var sendBtn = document.getElementById("sendBtn");
+
+    let senderId = '<%= id %>';
+    let receiverId;
+    console.log(senderId);
+    let room;
+
+    nameReceiver.innerHTML = "";
+
+    function showData(n, ri) {
+      receiverId = ri;
+        container.innerHTML = "";
+        nameReceiver.innerText = n;
+        socket.emit("getData", {sender: senderId , receiver: ri });
+    }
+
+    sendBtn.addEventListener("click", e => {
+        e.preventDefault();
+        var message = messageInput.value;
+        messageInput.value = "";
+        socket.emit("storeMessage", { id: senderId, message: message, room: room });
+        var sender = document.createElement("div");
+        sender.className = "sender";
+        var msg = document.createElement("div");
+        msg.className = "msg";
+        msg.innerText = message;
+        sender.appendChild(msg);
+        container.appendChild(sender);
+    });
+
+    socket.on("setData", data => {
+        room = data.room;
+        console.log(room);
+        console.log(data.messages)
+        data.messages.forEach(message => {
+            if(message.senderId === senderId){
+                var sender = document.createElement("div");
+                sender.className = "sender";
+                var msg = document.createElement("div");
+                msg.className = "msg";
+                msg.innerText = message.message;
+                sender.appendChild(msg);
+                container.appendChild(sender);
+            }else{
+                var receiver = document.createElement("div");
+                receiver.className = "receiver";
+                var msg = document.createElement("div");
+                msg.className = "msg";
+                msg.innerText = message.message;
+                receiver.appendChild(msg);
+                container.appendChild(receiver);
+            }
+        });
+    });
+
+    socket.on("appendMessage", data => {
+        if(nameReceiver.innerHTML !== "" && receiverId === data.id){
+        var receiver = document.createElement("div");
+        receiver.className = "receiver";
+        var msg = document.createElement("div");
+        msg.className = "msg";
+        msg.innerText = data.message;
+        receiver.appendChild(msg);
+        container.appendChild(receiver);
+        }
+    })
+  </script>
+</html>
